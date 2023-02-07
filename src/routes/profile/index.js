@@ -2,7 +2,7 @@ import { useEffect, useState } from 'preact/hooks';
 import style from './style.module.css';
 
 // Note: `user` comes from the URL, courtesy of our router
-export default function Profile({ user }) {
+export default function Trainer({ user }) {
 	const [time, setTime] = useState(Date.now());
 	const [count, setCount] = useState(10);
 

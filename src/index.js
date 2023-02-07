@@ -5,6 +5,7 @@ import { Header } from './components/header';
 // Code-splitting is automated for `routes` directory
 import Home from './routes/home';
 import Profile from './routes/profile';
+import Trainer from './routes/trainer';
 
 import './style/index.css';
 
@@ -15,6 +16,7 @@ export default function App() {
 			<main>
 				<Router>
 					<Home path="/" />
+					<Trainer path="/trainer" user="hello world" />
 					<Profile path="/profile/" user="me" />
 					<Profile path="/profile/:user" />
 				</Router>
