@@ -20,8 +20,8 @@ export default function Trainer({ user }) {
 	const [late, setLate] = useState(0);
 	const [status, setStatus] = useState(paused);
 
-	const delay = 1000;
-	const delayInS = '--duration: 1s;';
+	const delay = 650;
+	const delayInS = '--duration:' + delay + 'ms;';
 	const numberOfRuns = 30;
 
 	const items = [
