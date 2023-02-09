@@ -12,4 +12,22 @@
 
 .selected {
 	background: green;
+	background: 0.7s ease-out;
+	transition: background .5s ease-out;
 }
+
+.missed {
+	background: red;
+}
+
+/* Removes SVG styling that would hide the time label */
+.base-timer-circle {
+	fill: none;
+	stroke: none;
+  }
+  
+  /* The SVG path that displays the timer's progress */
+  .base-timer-path-elapsed {
+	stroke-width: 7px;
+	stroke: grey;
+  }
