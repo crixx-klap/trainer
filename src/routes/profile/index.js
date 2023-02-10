@@ -22,7 +22,7 @@ export default function Trainer({ user }) {
 	const [elapsed, setElapsed] = useState([]);
 	const [status, setStatus] = useState(paused);
 
-	const delay = 1000;
+	const delay = 650;
 	const delayInS = '--duration:' + delay + 'ms;';
 	const numberOfRuns = 30;
 
@@ -129,7 +129,7 @@ export default function Trainer({ user }) {
 						<div class={m} key={index}>
 							{c ? 
 							<svg width="100%" viewBox="0 0 100 100" className={c} style={delayInS}>
-								<circle cx="50" cy="50" r="40" stroke="#428bca" stroke-width="6" fill="#555" />
+								<circle cx="50" cy="50" r="40" stroke="#428bca" stroke-width="6" fill="#666" />
 							</svg> : 
 							<svg width="100%" viewBox="0 0 100 100">
 								<circle cx="50" cy="50" r="40" stroke="#333" stroke-width="6" fill="#333" />
