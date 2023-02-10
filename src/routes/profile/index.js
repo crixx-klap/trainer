@@ -18,19 +18,21 @@ export default function Trainer({ user }) {
 	const [hit, setHit] = useState(0);
 	const [miss, setMiss] = useState(0);
 	const [late, setLate] = useState(0);
+	const [counterStartTime, setCounterStartTime] = useState(0);
+	const [elapsed, setElapsed] = useState([]);
 	const [status, setStatus] = useState(paused);
 
-	const delay = 650;
+	const delay = 1000;
 	const delayInS = '--duration:' + delay + 'ms;';
 	const numberOfRuns = 30;
 
-	const items = [
+	const items1 = [
 		'3', '6', '9', '=',
 		'2', '5', '8', '-',
 		'1', '4', '7', '0'
 	];
 
-	const items2 = [
+	const items = [
 		'q', 'w', 'e', 'r',
 		'a', 's', 'd', 'f',
 		'y', 'x', 'c', 'v'
@@ -46,6 +48,7 @@ export default function Trainer({ user }) {
 
 	const onStartClick = () => {
 		setStatus(waitingForInput);
+		clearTimeout(timeoutId);
 		setCounter(0);
 		setHit(0);
 		setMiss(0);
@@ -57,17 +60,21 @@ export default function Trainer({ user }) {
 		
 		if (status === waitingForInput) {
 			setTargetKey(items[Math.floor(Math.random() * items.length)]);
+			setCounterStartTime(new Date().getTime());
 			setTimeoutId(setTimeout(() => {
+				setElapsed(t => [...t, (new Date().getTime() - counterStartTime)]);	
 				setStatus(timeout);
 			}, delay));
 		} else if (status === paused) {
 			clearTimeout(timeoutId);
 			setTargetKey(undefined);
+			console.log(elapsed)
 		} else {
-			clearTimeout(timeoutId);
+			clearTimeout(timeoutId);			
 			
 			if (status === matched) {
 				setHit(x => x + 1);
+				setElapsed(t => [...t, (new Date().getTime() - counterStartTime)]);
 			} else if (status === missed) {
 				setMiss(x => x + 1);
 			} else if (status === timeout) {
@@ -107,6 +114,7 @@ export default function Trainer({ user }) {
 			<h3>hit: {hit}</h3>
 			<h3>miss: {miss}</h3>
 			<h3>late: {late}</h3>
+			<h3>reaction: {elapsed.length > 0 ? Math.round(elapsed.reduce((acc, curr) => acc + curr, 0) / elapsed.length) : '-'} ms</h3>
 			<div class={style.grid}>
 				{items.map((x, index) => {
 					let c;
