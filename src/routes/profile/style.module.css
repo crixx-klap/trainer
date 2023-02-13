@@ -44,6 +44,10 @@
 	transition: background .5s ease-out;
 }
 
+.skill {
+	background-image: url('https://img.finalfantasyxiv.com/lds/d/7a622f61949998a4bca402f5be90c0417bb02ac1.png');
+}
+
 .missed {
 	background: red;
 }

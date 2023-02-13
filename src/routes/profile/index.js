@@ -55,6 +55,10 @@ export default function Trainer({ user }) {
 		setLate(0);
 	}
 
+	const onPauseClick = () => {
+		setStatus(paused);
+	}
+
 	useEffect(()=>{
 		console.log(status, counter);
 		
@@ -106,10 +110,16 @@ export default function Trainer({ user }) {
 		}
 	}, [keyPressed]);
 
+	const getSkillIcon = (status, missed, keyPressed, items, index) => {
+		let m = style.skill;
+		if (status === missed && keyPressed.key === items[index]) {
+			m += (' ' + style.missed);
+		}
+		return m; 
+	}
 
 	return (
 		<div class={style.profile}>
-			<button onClick={onStartClick}>Start</button>
 			<h1>Status: {status}</h1>
 			<h3>hit: {hit}</h3>
 			<h3>miss: {miss}</h3>
@@ -121,12 +131,8 @@ export default function Trainer({ user }) {
 					if (status === waitingForInput && targetKey === items[index]) {
 						c = style.circle;
 					}
-					let m;
-					if (status === missed && keyPressed.key === items[index]) {
-						m = style.missed;
-					}
 					return (
-						<div class={m} key={index}>
+						<div class={getSkillIcon(status, missed, keyPressed, items, index)} key={index}>
 							{c ? 
 							<svg width="100%" viewBox="0 0 100 100" className={c} style={delayInS}>
 								<circle cx="50" cy="50" r="40" stroke="#428bca" stroke-width="6" fill="#666" />
@@ -138,6 +144,8 @@ export default function Trainer({ user }) {
 					)
 				})}
 			</div>
+			{status === paused && <button onClick={onStartClick}>Start</button>}
+			{status !== paused && <button onClick={onPauseClick}>Pause</button>}
 		</div>		
 	);
 }
