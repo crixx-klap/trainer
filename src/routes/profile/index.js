@@ -64,9 +64,8 @@ export default function Trainer({ user }) {
 		
 		if (status === waitingForInput) {
 			setTargetKey(items[Math.floor(Math.random() * items.length)]);
-			setCounterStartTime(new Date().getTime());
+			setCounterStartTime(Date.now());
 			setTimeoutId(setTimeout(() => {
-				setElapsed(t => [...t, (new Date().getTime() - counterStartTime)]);	
 				setStatus(timeout);
 			}, delay));
 		} else if (status === paused) {
@@ -78,7 +77,7 @@ export default function Trainer({ user }) {
 			
 			if (status === matched) {
 				setHit(x => x + 1);
-				setElapsed(t => [...t, (new Date().getTime() - counterStartTime)]);
+				setElapsed(t => [...t, (Date.now() - counterStartTime)]);
 			} else if (status === missed) {
 				setMiss(x => x + 1);
 			} else if (status === timeout) {
@@ -120,11 +119,15 @@ export default function Trainer({ user }) {
 
 	return (
 		<div class={style.profile}>
+			<div>
+				{status === paused && <button onClick={onStartClick}>Start</button>}
+				{status !== paused && <button onClick={onPauseClick}>Pause</button>}
+			</div>
 			<h1>Status: {status}</h1>
 			<h3>hit: {hit}</h3>
 			<h3>miss: {miss}</h3>
 			<h3>late: {late}</h3>
-			<h3>reaction: {elapsed.length > 0 ? Math.round(elapsed.reduce((acc, curr) => acc + curr, 0) / elapsed.length) : '-'} ms</h3>
+			<h3>reaction: {status === paused && elapsed.length > 0 ? Math.round(elapsed.reduce((acc, curr) => acc + curr, 0) / elapsed.length) : '-'} ms</h3>
 			<div class={style.grid}>
 				{items.map((x, index) => {
 					let c;
@@ -144,8 +147,6 @@ export default function Trainer({ user }) {
 					)
 				})}
 			</div>
-			{status === paused && <button onClick={onStartClick}>Start</button>}
-			{status !== paused && <button onClick={onPauseClick}>Pause</button>}
 		</div>		
 	);
 }
