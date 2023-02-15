@@ -22,20 +22,26 @@ export default function Trainer({ user }) {
 	const [elapsed, setElapsed] = useState([]);
 	const [status, setStatus] = useState(paused);
 
-	const delay = 650;
+	const delay = 1000;
 	const delayInS = '--duration:' + delay + 'ms;';
 	const numberOfRuns = 30;
 
-	const items1 = [
+	const items0 = [
 		'3', '6', '9', '=',
 		'2', '5', '8', '-',
 		'1', '4', '7', '0'
 	];
 
-	const items = [
+	const items1 = [
 		'q', 'w', 'e', 'r',
 		'a', 's', 'd', 'f',
 		'y', 'x', 'c', 'v'
+	];
+
+	const items = [
+		'2', '3', '4', '5',
+		'q', 'w', 'e', 'r',
+		'a', 's', 'd', 'f'
 	];
 
 	useEffect(()=>{
