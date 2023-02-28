@@ -9,7 +9,33 @@ export default function Trainer({ user }) {
 	const matched = "matched";
 	const missed = "missed";
 	const timeout = "timeout";
-
+	const delay = 1000;
+	const delayInS = '--duration:' + delay + 'ms;';
+	const numberOfRuns = 30;
+	const layout = [
+		{
+			id: 'Keyboard_de',
+			keys: [
+				'q', 'w', 'e', 'r',
+				'a', 's', 'd', 'f',
+				'y', 'x', 'c', 'v'
+			]
+		},{
+			id: 'Mouse_de',
+			keys: [
+				'3', '6', '9', '=',
+				'2', '5', '8', '-',
+				'1', '4', '7', '0'
+			]
+		},{
+			id: 'Function',
+			keys: [
+				'F1', 'F2', 'F3', 'F4',
+				'F5', 'F6', 'F7', 'F8',
+				'F9', 'F10', 'F11', 'F12'
+			]
+		}
+	]
 
 	const [keyPressed, setKeyPressed] = useState(null);
 	const [targetKey, setTargetKey] = useState(null);
@@ -21,28 +47,7 @@ export default function Trainer({ user }) {
 	const [counterStartTime, setCounterStartTime] = useState(0);
 	const [elapsed, setElapsed] = useState([]);
 	const [status, setStatus] = useState(paused);
-
-	const delay = 1000;
-	const delayInS = '--duration:' + delay + 'ms;';
-	const numberOfRuns = 30;
-
-	const items0 = [
-		'3', '6', '9', '=',
-		'2', '5', '8', '-',
-		'1', '4', '7', '0'
-	];
-
-	const items1 = [
-		'q', 'w', 'e', 'r',
-		'a', 's', 'd', 'f',
-		'y', 'x', 'c', 'v'
-	];
-
-	const items = [
-		'2', '3', '4', '5',
-		'q', 'w', 'e', 'r',
-		'a', 's', 'd', 'f'
-	];
+	const [items, setItems] = useState(layout[0]);
 
 	useEffect(()=>{
 		console.log("run once")
@@ -69,7 +74,7 @@ export default function Trainer({ user }) {
 		console.log(status, counter);
 		
 		if (status === waitingForInput) {
-			setTargetKey(items[Math.floor(Math.random() * items.length)]);
+			setTargetKey(items.keys[Math.floor(Math.random() * items.keys.length)]);
 			setCounterStartTime(Date.now());
 			setTimeoutId(setTimeout(() => {
 				setStatus(timeout);
@@ -115,9 +120,9 @@ export default function Trainer({ user }) {
 		}
 	}, [keyPressed]);
 
-	const getSkillIcon = (status, missed, keyPressed, items, index) => {
+	const getSkillIcon = (status, missed, keyPressed, keys, index) => {
 		let m = style.skill;
-		if (status === missed && keyPressed.key === items[index]) {
+		if (status === missed && keyPressed.key === keys[index]) {
 			m += (' ' + style.missed);
 		}
 		return m; 
@@ -128,6 +133,11 @@ export default function Trainer({ user }) {
 			<div>
 				{status === paused && <button onClick={onStartClick}>Start</button>}
 				{status !== paused && <button onClick={onPauseClick}>Pause</button>}
+				<select value={items.id} onChange={e => setItems(layout.find(x => x.id === e.target.value))}>
+					{layout.map(x => (
+						<option value={x.id}>{x.id}</option>
+					))}
+				</select>
 			</div>
 			<h1>Status: {status}</h1>
 			<h3>hit: {hit}</h3>
@@ -135,13 +145,13 @@ export default function Trainer({ user }) {
 			<h3>late: {late}</h3>
 			<h3>reaction: {status === paused && elapsed.length > 0 ? Math.round(elapsed.reduce((acc, curr) => acc + curr, 0) / elapsed.length) : '-'} ms</h3>
 			<div class={style.grid}>
-				{items.map((x, index) => {
+				{items.keys.map((x, index) => {
 					let c;
-					if (status === waitingForInput && targetKey === items[index]) {
+					if (status === waitingForInput && targetKey === items.keys[index]) {
 						c = style.circle;
 					}
 					return (
-						<div class={getSkillIcon(status, missed, keyPressed, items, index)} key={index}>
+						<div class={getSkillIcon(status, missed, keyPressed, items.keys, index)} key={index}>
 							{c ? 
 							<svg width="100%" viewBox="0 0 100 100" className={c} style={delayInS}>
 								<circle cx="50" cy="50" r="40" stroke="#428bca" stroke-width="6" fill="#666" />
